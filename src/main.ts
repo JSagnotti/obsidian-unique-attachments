@@ -60,9 +60,9 @@ export default class ConsistentAttachmentsAndLinks extends Plugin {
 		if (!mdfile.path.endsWith(".md")) {
 			return;
 		}
-			
+
 		let renamedCount = await this.renameAttachmentsForActiveMD(mdfile);
-		
+
 		if (renamedCount == 0)
 			new Notice("No files found that need to be renamed");
 		else if (renamedCount == 1)
@@ -98,7 +98,7 @@ export default class ConsistentAttachmentsAndLinks extends Plugin {
 		let targetFileAlreadyExists = await this.app.vault.adapter.exists(validPath)
 
 		if (targetFileAlreadyExists) {
-			//if file content is the same in both files, one of them will be deleted			
+			//if file content is the same in both files, one of them will be deleted
 			let validAnotherFileBaseName = await this.generateValidBaseName(validPath);
 			if (validAnotherFileBaseName != validBaseName) {
 				console.warn("Unique attachments: cant rename file \n   " + filePath + "\n    to\n   " + validPath + "\n   Another file exists with the same (target) name but different content.")
@@ -149,7 +149,7 @@ export default class ConsistentAttachmentsAndLinks extends Plugin {
 
 		let rlinks = Object.keys(this.app.metadataCache.resolvedLinks[mdfile.path]);
 		let renamedCount = 0;
-		
+
 		let actMetadataCache = this.app.metadataCache.getFileCache(mdfile);
 		let currentView = this.app.workspace.activeLeaf.view as MarkdownView;
 
@@ -180,9 +180,9 @@ export default class ConsistentAttachmentsAndLinks extends Plugin {
 
 		return renamedCount;
 	}
-	
+
 	saveAttachmentNameInLink(mdc: CachedMetadata, mdfile: TFile, file: TAbstractFile, baseName: string, currentView: MarkdownView) {
-		let cmDoc = currentView.sourceMode.cmEditor;
+		let cmDoc = currentView.editor;
 		if (!mdc.links) {
 			return;
 		}
@@ -198,7 +198,7 @@ export default class ConsistentAttachmentsAndLinks extends Plugin {
 				newlink = newlink.substring(1);
 				const linkstart = eachLink.position.start;
 				const linkend = eachLink.position.end;
-				cmDoc.replaceRange(newlink, 
+				cmDoc.replaceRange(newlink,
 						   {line: linkstart.line, ch: linkstart.col},
 						   {line: linkend.line, ch: linkend.col});
 			}
@@ -212,7 +212,7 @@ export default class ConsistentAttachmentsAndLinks extends Plugin {
 		let targetFileAlreadyExists = await this.app.vault.adapter.exists(validPath)
 
 		if (targetFileAlreadyExists) {
-			//if file content is the same in both files, one of them will be deleted			
+			//if file content is the same in both files, one of them will be deleted
 			let validAnotherFileBaseName = await this.generateValidBaseName(validPath);
 			if (validAnotherFileBaseName != validBaseName) {
 				console.warn("Unique attachments: cant rename file \n   " + file.path + "\n    to\n   " + validPath + "\n   Another file exists with the same (target) name but different content.")
@@ -227,7 +227,7 @@ export default class ConsistentAttachmentsAndLinks extends Plugin {
 			try {
 				// Obsidian can not replace one file to another
 				let oldfile = this.app.vault.getAbstractFileByPath(validPath)
-				// so just silently delete the old file 
+				// so just silently delete the old file
 				await this.app.vault.delete(oldfile);
 				// and give the same name to the new one
 				await this.app.fileManager.renameFile(file, validPath);
