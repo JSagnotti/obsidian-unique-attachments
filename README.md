@@ -29,3 +29,4 @@ Call the hotkey when you want to search and rename attachments. You will see a n
 
 
 It is recommended to make a backup of your files before using this plugin.
+
